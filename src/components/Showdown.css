@@ -1,0 +1,132 @@
+:root {
+  --navbar-height: 100px;
+}
+
+.showdown-page {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  background-color: #222222;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.showdown-container {
+  flex: 1;
+  display: flex;
+  position: relative;
+  width: calc(100% - 300px); /* Largeur totale moins le chat */
+}
+
+.character-left {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 45%;
+  height: 80vh;
+  background-color: #0088cc;
+}
+
+.character-right {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 45%;
+  height: 80vh;
+  background-color: #cc0000;
+}
+
+.vs-symbol {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: #ff6600;
+  font-size: 6rem;
+  font-weight: bold;
+  z-index: 10;
+}
+
+.match-info {
+  position: absolute;
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  z-index: 10;
+}
+
+.chat-section {
+  position: fixed;
+  right: 0;
+  top: var(--navbar-height);
+  width: 300px;
+  height: calc(100vh - var(--navbar-height));
+  background-color: #18181B;
+  border-left: 1px solid #333;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.chat-input-container {
+  padding: 10px;
+  border-top: 1px solid #333;
+  background-color: #18181B;
+  display: flex;
+  gap: 8px;
+}
+
+.chat-input {
+  flex: 1;
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 4px;
+  padding: 8px;
+  color: white;
+  font-size: 14px;
+}
+
+.chat-input:focus {
+  outline: none;
+  border-color: #ff6600;
+}
+
+.chat-send-button {
+  background-color: #ff6600;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.chat-send-button:hover {
+  background-color: #ff8533;
+}
+
+.chat-message {
+  padding: 8px 12px;
+  color: white;
+}
+
+.username {
+  color: #ff6600;
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+.message {
+  color: #fff;
+} 
