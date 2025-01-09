@@ -1,0 +1,19 @@
+div {
+    box-sizing: border-box;
+  }
+  
+  h1, h2 {
+    margin-bottom: 16px;
+  }
+  
+  button {
+    cursor: pointer;
+  }
+  
+  @media (max-width: 768px) {
+    /* Empile les colonnes sur mobile */
+    .flex {
+      flex-direction: column;
+    }
+  }
+  
