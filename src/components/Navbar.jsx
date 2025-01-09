@@ -1,5 +1,6 @@
 import React from 'react';
 import './Navbar.css';
+import { Link } from 'react-router-dom';
 
 function Navbar() {
   return (
@@ -14,9 +15,9 @@ function Navbar() {
           </div>
         </div>
         <div className="nav-right">
-          <a href="/showdown">
+          <Link to="/showdown">
             <img src="/showdown.png" className="showdown-text" alt="Showdown" />
-          </a>
+          </Link>
         </div>
       </nav>
     </header>
