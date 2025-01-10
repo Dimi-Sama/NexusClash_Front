@@ -18,25 +18,71 @@
   flex: 1;
   display: flex;
   position: relative;
-  width: calc(100% - 300px); /* Largeur totale moins le chat */
+  width: calc(100% - 300px);
+  background: linear-gradient(to bottom, #1a1a1a, #2a2a2a);
+}
+
+.character-left, .character-right {
+  position: absolute;
+  bottom: 0;
+  width: 40%;
+  height: 30vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  overflow: visible;
+  padding: 20px;
+  box-sizing: border-box;
+  margin-bottom: 30vh;
+  transition: transform 0.3s ease-in-out;
 }
 
 .character-left {
-  position: absolute;
   left: 0;
-  bottom: 0;
-  width: 45%;
-  height: 80vh;
-  background-color: #0088cc;
+  background-color: rgba(0, 136, 204, 0.3);
+  border: 2px solid #0088cc;
+  border-radius: 10px;
+  margin-left: 20px;
 }
 
 .character-right {
-  position: absolute;
   right: 0;
-  bottom: 0;
-  width: 45%;
-  height: 80vh;
-  background-color: #cc0000;
+  background-color: rgba(204, 0, 0, 0.3);
+  border: 2px solid #cc0000;
+  border-radius: 10px;
+  margin-right: 20px;
+}
+
+.character-left img, .character-right img {
+  display: block;
+  width: 25vw;
+  height: 45vh;
+  object-fit: contain;
+}
+
+.character-name {
+  color: white;
+  font-size: 1.5rem;
+  margin-top: 1rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.battle-text {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  color: white;
+  width: 80%;
+  text-align: center;
+  font-size: 1.2rem;
+  z-index: 10;
+  transition: transform 0.1s ease-in-out;
+  min-height: 100px;
 }
 
 .vs-symbol {
@@ -129,4 +175,67 @@
 
 .message {
   color: #fff;
-} 
+}
+
+.new-battle-btn {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #ff6600;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  z-index: 10;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.new-battle-btn:hover {
+  background-color: #ff8533;
+}
+
+.new-battle-btn:active {
+  transform: translateX(-50%) scale(0.98);
+}
+
+@keyframes shake {
+  10%, 90% { transform: translate3d(-1px, 0, 0); }
+  20%, 80% { transform: translate3d(2px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+  40%, 60% { transform: translate3d(4px, 0, 0); }
+}
+
+.shake {
+  animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+.character-left, .character-right {
+  transition: transform 0.3s ease-in-out;
+}
+
+.error-message {
+  text-align: center;
+  color: #ff4444;
+  padding: 20px;
+  margin: 20px;
+  border: 1px solid #ff4444;
+  border-radius: 4px;
+  background-color: rgba(255, 68, 68, 0.1);
+}
+
+.error-message button {
+  margin-top: 10px;
+  padding: 8px 16px;
+  background-color: #ff4444;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.error-message button:hover {
+  background-color: #ff6666;
+}
