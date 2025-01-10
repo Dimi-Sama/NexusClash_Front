@@ -12,6 +12,7 @@ function Navbar() {
             <a href="#">My List</a>
             <a href="#">Anime</a>
             <a href="#">User</a>
+            <a href="/login">Login</a>
           </div>
         </div>
         <div className="nav-right">
