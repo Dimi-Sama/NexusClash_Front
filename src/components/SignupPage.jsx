@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import './Login.css';
+import './Signup.css';
 
-const LoginPage = () => {
+const SignupPage = () => {
   const [formData, setFormData] = useState({
     username: '',
+    email: '',
     password: '',
   });
   const [message, setMessage] = useState('');
-  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,22 +19,17 @@ const LoginPage = () => {
     e.preventDefault();
     setMessage('');
     try {
-      const response = await axios.post('http://localhost:5000/utilisateurs/login', formData);
-      setMessage(response.data.message);
-
-      if (response.status === 200) {
-        // Redirige vers la page d'accueil après la connexion
-        navigate('/');
-      }
+      const response = await axios.post('http://localhost:5000/utilisateurs/', formData);
+      setMessage('Utilisateur créé avec succès!');
     } catch (error) {
-      setMessage('Nom d’utilisateur ou mot de passe incorrect.');
+      setMessage('Erreur lors de la création de l’utilisateur.');
     }
   };
 
   return (
-    <div className="login-page">
-      <div className="login-form-container">
-        <h2>Connexion</h2>
+    <div className="signup-page">
+      <div className="signup-form-container">
+        <h2>Créer un compte</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label>Nom d'utilisateur:</label>
@@ -43,6 +37,16 @@ const LoginPage = () => {
               type="text"
               name="username"
               value={formData.username}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>Email:</label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
               onChange={handleChange}
               required
             />
@@ -57,12 +61,12 @@ const LoginPage = () => {
               required
             />
           </div>
-          <button type="submit" className="login-button">Se connecter</button>
+          <button type="submit" className="signup-button">Créer un compte</button>
         </form>
-        {message && <p className="login-message">{message}</p>}
+        {message && <p className="signup-message">{message}</p>}
       </div>
     </div>
   );
 };
 
-export default LoginPage;
+export default SignupPage;
