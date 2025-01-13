@@ -1,0 +1,72 @@
+import React, { useState } from 'react';
+import axios from 'axios';
+import './Signup.css';
+
+const SignupPage = () => {
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: '',
+  });
+  const [message, setMessage] = useState('');
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setMessage('');
+    try {
+      const response = await axios.post('http://localhost:5000/utilisateurs/', formData);
+      setMessage('Utilisateur créé avec succès!');
+    } catch (error) {
+      setMessage('Erreur lors de la création de l’utilisateur.');
+    }
+  };
+
+  return (
+    <div className="signup-page">
+      <div className="signup-form-container">
+        <h2>Créer un compte</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>Nom d'utilisateur:</label>
+            <input
+              type="text"
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>Email:</label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>Mot de passe:</label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <button type="submit" className="signup-button">Créer un compte</button>
+        </form>
+        {message && <p className="signup-message">{message}</p>}
+      </div>
+    </div>
+  );
+};
+
+export default SignupPage;
