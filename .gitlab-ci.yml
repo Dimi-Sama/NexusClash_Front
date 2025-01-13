@@ -32,8 +32,8 @@ package-job:
   before_script:
     - docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
   script:
-    - docker build --pull --rm -f "Dockerfile.prod" -t yaramow/goodiesfront:$CI_COMMIT_MESSAGE "."
-    - docker push yaramow/goodiesfront:$CI_COMMIT_MESSAGE
+    - docker build --pull --rm -f "Dockerfile.prod" -t OverdriveSystems/NexusClash_Front:$CI_COMMIT_MESSAGE "."
+    - docker push OverdriveSystems/NexusClash_Front:$CI_COMMIT_MESSAGE
   only:
     - master
 
