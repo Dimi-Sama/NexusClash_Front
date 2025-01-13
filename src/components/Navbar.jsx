@@ -47,7 +47,7 @@ function Navbar() {
             <div className="nav-links">
               <a href="#">My List</a>
               <a href="#">Anime</a>
-              <a href="#">User</a>
+              <a href="#">{user.username}</a>
               <span>{user.username}</span>
               <button onClick={handleLogout}>Logout</button>
             </div>
