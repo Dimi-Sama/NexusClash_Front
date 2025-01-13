@@ -14,6 +14,8 @@ const LoginPage = () => {
       const user = await loginUser(username, password);
       localStorage.setItem('user', JSON.stringify(user)); // Stocke l'utilisateur connecté
       navigate('/'); // Redirige vers la page d'accueil
+      window.location.reload()
+
     } catch (err) {
       setError('Identifiants incorrects');
     }
