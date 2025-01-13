@@ -1,37 +1,55 @@
 import axios from 'axios';
 
-// Fonction pour récupérer l'utilisateur connecté
+// Crée une instance Axios avec une configuration de base
+const axiosInstance = axios.create({
+  baseURL: 'http://localhost:5000', // Assurez-vous que cette URL pointe vers votre backend Flask
+  headers: { 'Content-Type': 'application/json' },
+});
+
+// Ajoute un intercepteur pour inclure automatiquement le token JWT dans les en-têtes
+axiosInstance.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+// Fonction pour connecter un utilisateur
+export const loginUser = async (username, password) => {
+  try {
+    const response = await axiosInstance.post('/utilisateurs/login', {
+      username,
+      password,
+    });
+
+    // Stocker le token dans le localStorage
+    localStorage.setItem('token', response.data.token);
+
+    // Retourner les informations utilisateur
+    return response.data.user;
+  } catch (error) {
+    throw error.response?.data?.error || 'Erreur lors de la connexion';
+  }
+};
+
+// Fonction pour récupérer l'utilisateur actuel à partir du backend
 export const getCurrentUser = async () => {
   try {
-    const response = await axios.get('http://localhost:5000/utilisateurs/me', {
-      withCredentials: true, // Inclure les cookies dans les requêtes
-    });
-    return response.data;
+    // Vérifier si le token est présent dans le localStorage
+    const token = localStorage.getItem('token');
+    console.log('Token:', token);   
+
+    const response = await axiosInstance.get('/utilisateurs/me');
+    return response.data; // Retourne l'utilisateur actuel
   } catch (error) {
-    console.error('Erreur lors de la récupération de l’utilisateur:', error);
-    return null; // Retourne null si non connecté
+    console.error(error);  // Affiche l'erreur pour mieux comprendre
+    throw error.response?.data?.error || 'Erreur lors de la récupération des données utilisateur';
   }
 };
 
-// Fonction pour gérer la connexion
-export const loginUser = async (email, password) => {
-  try {
-    const response = await axios.post(
-      'http://localhost:5000/utilisateurs/login',
-      { email, password },
-      { withCredentials: true }
-    );
-    return response.data;
-  } catch (error) {
-    throw error.response?.data?.message || 'Erreur lors de la connexion';
-  }
-};
 
-// Fonction pour gérer la déconnexion
-export const logoutUser = async () => {
-  try {
-    await axios.post('http://localhost:5000/utilisateurs/logout', {}, { withCredentials: true });
-  } catch (error) {
-    console.error('Erreur lors de la déconnexion:', error);
-  }
+// Fonction pour déconnecter l'utilisateur
+export const logoutUser = () => {
+  localStorage.removeItem('token'); // Supprime le token du localStorage
 };
