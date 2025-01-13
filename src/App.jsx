@@ -10,23 +10,12 @@ import { UserProvider } from './context/UserContext';
 
 function App() {
   return (
-    <UserProvider>
-
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/showdown" element={<Showdown />} />
       <Route path="/anime" element={<AnimeList />} />
-      <Route
-            path="/showdown"
-            element={
-              <ProtectedRoute>
-                <Showdown />
-              </ProtectedRoute>
-            }
-          />
     </Routes>
-    </UserProvider>
 
   )
 }

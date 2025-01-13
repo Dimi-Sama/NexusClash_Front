@@ -1,68 +1,46 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import './Login.css';
+import { loginUser } from '../api/auth';
 
 const LoginPage = () => {
-  const [formData, setFormData] = useState({
-    username: '',
-    password: '',
-  });
-  const [message, setMessage] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    setMessage('');
     try {
-      const response = await axios.post('http://localhost:5000/utilisateurs/login', formData);
-      setMessage(response.data.message);
-
-      if (response.status === 200) {
-        // Redirige vers la page d'accueil après la connexion
-        navigate('/');
-      }
-    } catch (error) {
-      setMessage('Nom d’utilisateur ou mot de passe incorrect.');
+      const user = await loginUser(username, password);
+      localStorage.setItem('user', JSON.stringify(user)); // Stocke l'utilisateur connecté
+      navigate('/'); // Redirige vers la page d'accueil
+    } catch (err) {
+      setError('Identifiants incorrects');
     }
   };
 
   return (
-    <div className="login-page">
-      <div className="login-form-container">
-        <h2>Connexion</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Nom d'utilisateur:</label>
-            <input
-              type="text"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label>Mot de passe:</label>
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <button type="submit" className="login-button">Se connecter</button>
-        </form>
-        {message && <p className="login-message">{message}</p>}
-      </div>
-    </div>
+    <form onSubmit={handleLogin}>
+      <h2>Connexion</h2>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+      <input
+        type="text"
+        placeholder="Nom d'utilisateur"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        required
+      />
+      <input
+        type="password"
+        placeholder="Mot de passe"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        required
+      />
+      <button type="submit">Se connecter</button>
+    </form>
   );
 };
 
 export default LoginPage;
+ 
