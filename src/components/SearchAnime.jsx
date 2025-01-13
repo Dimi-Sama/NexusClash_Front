@@ -1,0 +1,76 @@
+import React, { useState, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
+import './SearchAnime.css';
+
+function SearchAnime() {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const navigate = useNavigate();
+
+  // Création d'une version debounced de la recherche
+  const debouncedSearch = useCallback(
+    (() => {
+      let timeoutId;
+      return (value) => {
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+        }
+        timeoutId = setTimeout(async () => {
+          if (value.length < 2) {
+            setSearchResults([]);
+            return;
+          }
+          try {
+            const response = await fetch(`http://localhost:5000/anime/search?query=${value}`);
+            const data = await response.json();
+            setSearchResults(data);
+          } catch (error) {
+            console.error('Erreur de recherche:', error);
+          }
+        }, 300); // Délai de 300ms
+      };
+    })(),
+    []
+  );
+
+  const handleSearch = (value) => {
+    setSearchQuery(value);
+    debouncedSearch(value);
+  };
+
+  const handleSelectAnime = (animeId) => {
+    navigate(`/anime/${animeId}`);
+    setSearchQuery('');
+    setSearchResults([]);
+  };
+
+  return (
+    <div className="search-container">
+      <input
+        type="text"
+        value={searchQuery}
+        onChange={(e) => handleSearch(e.target.value)}
+        placeholder="Rechercher un anime..."
+        className="search-input"
+      />
+      {searchResults.length > 0 && (
+        <div className="search-results">
+          {searchResults.map((anime) => (
+            <div
+              key={anime.id}
+              className="search-result-item"
+              onClick={() => handleSelectAnime(anime.id)}
+            >
+              <img src={anime.image_url} alt={anime.title} className="search-result-image" />
+              <div className="search-result-info">
+                <div className="search-result-title">{anime.title}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default SearchAnime; 

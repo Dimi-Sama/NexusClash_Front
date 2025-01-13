@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const PopularAnimeList = () => {
   const [animes, setAnimes] = useState([]);
@@ -27,28 +28,37 @@ const PopularAnimeList = () => {
       {loading && <p>Chargement...</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
-        {animes.map((anime,index) => (
-          <div
-            key={`${anime.mal_id}-${index}`}
-            style={{
-              border: '1px solid #ddd',
-              borderRadius: '8px',
-              padding: '16px',
-              maxWidth: '200px',
-            }}
+        {animes.map((anime, index) => (
+          <Link 
+            to={`/anime/${anime.id}`} 
+            key={`${anime.id}-${index}`}
+            style={{ textDecoration: 'none', color: 'inherit' }}
           >
-            <img
-              src={anime.image_url}
-              alt={anime.title}
-              style={{ width: '100%', borderRadius: '4px' }}
-            />
-            <h3>{anime.title}</h3>
-            <p>
-              {anime.description
-                ? anime.description.substring(0, 100)
-                : 'Aucune description disponible'}...
-            </p>
-          </div>
+            <div
+              style={{
+                border: '1px solid #ddd',
+                borderRadius: '8px',
+                padding: '16px',
+                maxWidth: '200px',
+                transition: 'transform 0.2s',
+                ':hover': {
+                  transform: 'scale(1.05)'
+                }
+              }}
+            >
+              <img
+                src={anime.image_url}
+                alt={anime.title || anime.title_japanese}
+                style={{ width: '100%', borderRadius: '4px' }}
+              />
+              <h3>{anime.title || anime.title_japanese}</h3>
+              <p>
+                {anime.description
+                  ? anime.description.substring(0, 100)
+                  : 'Aucune description disponible'}...
+              </p>
+            </div>
+          </Link>
         ))}
       </div>
     </div>
