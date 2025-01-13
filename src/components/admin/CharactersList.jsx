@@ -16,6 +16,7 @@ function CharactersList() {
       .catch(error => console.error('Erreur lors de la récupération des personnages:', error))
   }, [])
 
+<<<<<<< HEAD
   const handleDelete = (id) => {
     if (window.confirm('Êtes-vous sûr de vouloir supprimer ce personnage ?')) {
       fetch(`http://127.0.0.1:5000/personnages/delete/${id}`, {
@@ -34,6 +35,8 @@ function CharactersList() {
     }
   };
 
+=======
+>>>>>>> 563202ee6f08ab3347e865d82368b4176659e77b
   return (
     <div className="characters-list">
       <div className="list-header">
@@ -66,7 +69,11 @@ function CharactersList() {
                 <Link to={`/admin/characters/${character.id_personnage}/edit`}>
                   Modifier
                 </Link>
+<<<<<<< HEAD
                 <button onClick={() => handleDelete(character.id_personnage)}>
+=======
+                <button onClick={() => console.log('Supprimer', character.id_personnage)}>
+>>>>>>> 563202ee6f08ab3347e865d82368b4176659e77b
                   Supprimer
                 </button>
               </td>
