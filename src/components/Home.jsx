@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import NewAnimeList from './NewAnimeList';
 import './Home.css';
 import PopularAnimeList from './PopularAnimeList';
+import SearchAnime from './SearchAnime';
 
 function Home() {
   return (

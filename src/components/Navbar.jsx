@@ -36,7 +36,9 @@ function Navbar() {
     <header>
       <nav>
         <div className="nav-left">
-          <img src="/logo.png" className="logo-img" alt="Logo" />
+          <Link to="/">
+            <img src="/logo.png" className="logo-img" alt="Logo" />
+          </Link>
           {!user ? (
             // Si non connecté, afficher seulement le lien de connexion
             <div className="nav-links">

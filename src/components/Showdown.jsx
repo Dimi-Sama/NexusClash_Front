@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import './Showdown.css'
-import Navbar from './Navbar'
 import io from 'socket.io-client';
 
 function Showdown() {
@@ -161,7 +160,6 @@ function Showdown() {
 
   return (
     <div className="showdown-page">
-      <Navbar />
       <div className="showdown-container">
         <div className="battle-background">
           <iframe 
