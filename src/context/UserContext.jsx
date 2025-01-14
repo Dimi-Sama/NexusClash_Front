@@ -7,15 +7,27 @@ export const useUser = () => useContext(UserContext);
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const currentUser = await getCurrentUser(); // Vous récupérez l'utilisateur à partir de l'API
-      setUser(currentUser);
+    const initUser = async () => {
+      try {
+        const userData = await getCurrentUser();
+        setUser(userData);
+      } catch (error) {
+        console.error('Erreur lors de la récupération de l\'utilisateur:', error);
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    fetchUser();
+    initUser();
   }, []);
+
+  if (loading) {
+    return <div>Chargement...</div>;
+  }
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
