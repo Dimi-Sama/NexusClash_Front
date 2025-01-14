@@ -47,7 +47,7 @@ function Navbar() {
           ) : (
             // Si connecté, afficher les liens et le bouton de déconnexion
             <div className="nav-links">
-              <a href="#">My List</a>
+              <a href="/utilisateur">My List</a>
               <a href="#">Anime</a>
               <a href="#">{user.username}</a>
               <span>{user.username}</span>
