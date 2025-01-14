@@ -1,6 +1,7 @@
 stages:
   - install
   - build
+  - package
 
 install-job:
   stage: install
@@ -21,3 +22,18 @@ build-job:
   artifacts:
     paths:
       - dist
+package-job:
+  stage: package
+  image: docker
+  services:
+    - docker:dind
+  dependencies:
+    - build-job
+  before_script:
+    - docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
+  script:
+    - docker build --pull --rm -f "Dockerfile.prod" -t OverdriveSystems/NexusClash_Front:$CI_COMMIT_MESSAGE "."
+    - docker push OverdriveSystems/NexusClash_Front:$CI_COMMIT_MESSAGE
+  only:
+    - master
+
