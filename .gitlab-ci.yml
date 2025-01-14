@@ -1,0 +1,39 @@
+stages:
+  - install
+  - build
+  - package
+
+install-job:
+  stage: install
+  image: node:20.18.0-slim
+  script:
+    - npm install
+  artifacts:
+    paths:
+      - node_modules
+
+build-job:
+  stage: build
+  image: node:20.18.0-slim
+  dependencies:
+    - install-job
+  script:
+    - npm run build
+  artifacts:
+    paths:
+      - dist
+package-job:
+  stage: package
+  image: docker
+  services:
+    - docker:dind
+  dependencies:
+    - build-job
+  before_script:
+    - docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
+  script:
+    - docker build --pull --rm -f "Dockerfile.prod" -t OverdriveSystems/NexusClash_Front:$CI_COMMIT_MESSAGE "."
+    - docker push OverdriveSystems/NexusClash_Front:$CI_COMMIT_MESSAGE
+  only:
+    - master
+
