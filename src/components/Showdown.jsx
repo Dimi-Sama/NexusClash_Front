@@ -141,7 +141,7 @@ function Showdown() {
     e.preventDefault();
     if (messageInput.trim() && socket && bataille) {
         const messageData = {
-            id_utilisateur: 1, // À remplacer par l'ID réel de l'utilisateur
+            id_utilisateur: user.id_utilisateur, // À remplacer par l'ID réel de l'utilisateur
             id_bataille: bataille.id_bataille,
             contenu: messageInput
         };

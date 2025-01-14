@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  frontend:
+    image: overdrivesystems/nexusclash_front:0.0.1
+    container_name: NexusClash-frontend
+    ports:
+      - "80:80"
+    restart: unless-stopped
+
+  api:
+    image: overdrivesystems/nexusclash_back:0.0.1
+    container_name: NexusClash-api
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://Nexus:Nexus1234@postgres:5432/NexusClash
+      - NODE_ENV=production
+    depends_on:
+      - postgres
+    networks:
+      - NexusClash-network
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:latest
+    container_name: NexusClash-postgres
+    environment:
+      - POSTGRES_USER=Nexus
+      - POSTGRES_PASSWORD=Nexus1234
+      - POSTGRES_DB=NexusClash
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - NexusClash-network
+    restart: unless-stopped
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: NexusClash-ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    networks:
+      - NexusClash-network
+    restart: unless-stopped
+
+networks:
+  NexusClash-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  ollama_data: 

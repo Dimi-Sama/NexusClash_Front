@@ -1,0 +1,147 @@
+/* Styles pour le conteneur DataTable */
+.rdt_Table {
+  background-color: #2a2a2a !important;
+  color: #fff !important;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* En-têtes de colonnes */
+.rdt_TableHead {
+  background-color: #1a1a1a !important;
+}
+
+.rdt_TableHeadRow {
+  background-color: #1a1a1a !important;
+  color: #fff !important;
+  font-weight: bold;
+  border-bottom: 2px solid #333;
+}
+
+/* Lignes du tableau */
+.rdt_TableRow {
+  background-color: #2a2a2a !important;
+  color: #fff !important;
+  border-bottom: 1px solid #333;
+}
+
+.rdt_TableRow:hover {
+  background-color: #3a3a3a !important;
+}
+
+/* Cellules */
+.rdt_TableCell {
+  padding: 12px 16px !important;
+}
+
+/* Pagination */
+.rdt_Pagination {
+  background-color: #1a1a1a !important;
+  color: #fff !important;
+  padding: 12px !important;
+  border-top: 1px solid #333;
+}
+
+/* Boutons de pagination */
+.rdt_Pagination button {
+  background-color: #333 !important;
+  color: #fff !important;
+  border: 1px solid #444 !important;
+}
+
+.rdt_Pagination button:hover:not(:disabled) {
+  background-color: #444 !important;
+}
+
+.rdt_Pagination button:disabled {
+  background-color: #222 !important;
+  color: #666 !important;
+}
+
+/* Select pour le nombre d'éléments par page */
+.rdt_Pagination select {
+  background-color: #333 !important;
+  color: #fff !important;
+  border: 1px solid #444 !important;
+  padding: 4px 8px !important;
+}
+
+/* Boutons d'action */
+.edit-btn, .delete-btn {
+  padding: 6px 12px;
+  margin: 0 4px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: none;
+  font-weight: 500;
+}
+
+.edit-btn {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.edit-btn:hover {
+  background-color: #45a049;
+}
+
+.delete-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+.delete-btn:hover {
+  background-color: #da190b;
+}
+
+/* Styles spécifiques pour le formulaire des batailles */
+.battles-admin {
+  padding: 20px;
+}
+
+.admin-form-section {
+  background-color: #2a2a2a;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #fff;
+}
+
+.form-group select,
+.form-group input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #444;
+  border-radius: 4px;
+  background-color: #1a1a1a;
+  color: #fff;
+}
+
+.form-group select:focus,
+.form-group input:focus {
+  outline: none;
+  border-color: #4CAF50;
+}
+
+.form-buttons {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.error-message {
+  color: #f44336;
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: rgba(244, 67, 54, 0.1);
+  border-radius: 4px;
+} 

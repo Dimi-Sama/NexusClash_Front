@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Crée une instance Axios avec une configuration de base
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:5000', // Assurez-vous que cette URL pointe vers votre backend Flask
+  baseURL: 'http://localhost:5000',
   headers: { 'Content-Type': 'application/json' },
 });
 
@@ -22,34 +22,27 @@ export const loginUser = async (username, password) => {
       username,
       password,
     });
-
-    // Stocker le token dans le localStorage
     localStorage.setItem('token', response.data.token);
-
-    // Retourner les informations utilisateur
     return response.data.user;
   } catch (error) {
     throw error.response?.data?.error || 'Erreur lors de la connexion';
   }
 };
 
-// Fonction pour récupérer l'utilisateur actuel à partir du backend
+// Fonction pour récupérer l'utilisateur actuel
 export const getCurrentUser = async () => {
   try {
-    // Vérifier si le token est présent dans le localStorage
-    const token = localStorage.getItem('token');
-    console.log('Token:', token);   
-
     const response = await axiosInstance.get('/utilisateurs/me');
-    return response.data; // Retourne l'utilisateur actuel
+    return response.data;
   } catch (error) {
-    console.error(error);  // Affiche l'erreur pour mieux comprendre
     throw error.response?.data?.error || 'Erreur lors de la récupération des données utilisateur';
   }
 };
 
-
 // Fonction pour déconnecter l'utilisateur
 export const logoutUser = () => {
-  localStorage.removeItem('token'); // Supprime le token du localStorage
+  localStorage.removeItem('token');
 };
+
+// Exporter l'instance axios par défaut
+export default axiosInstance;
