@@ -4,7 +4,7 @@ import Showdown from './components/Showdown'
 import AnimeList from './components/AnimeList'
 import LoginPage from './components/LoginPage'
 import AnimeDetail from './components/AnimeDetail'
-
+import UserList from './components/UtilisateurList'
 
 
 function App() {
@@ -15,6 +15,8 @@ function App() {
       <Route path="/showdown" element={<Showdown />} />
       <Route path="/anime" element={<AnimeList />} />
       <Route path="/anime/:id" element={<AnimeDetail />} />
+      <Route path="/utilisateur" element={<UserList />} />
+
     </Routes>
 
   )
