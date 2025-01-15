@@ -13,6 +13,7 @@ import BattlesAdmin from './components/admin/BattlesAdmin'
 import ProtectedRoute from './components/ProtectedRoute'
 import UsersAdmin from './components/admin/UsersAdmin'
 import MessagesAdmin from './components/admin/MessagesAdmin'
+import SignupPage from './components/SignupPage'
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         {/* Routes publiques */}
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
         <Route path="/showdown" element={<Showdown />} />
         <Route path="/anime" element={<AnimeList />} />
         <Route path="/anime/:id" element={<AnimeDetail />} />

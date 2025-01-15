@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import './NewAnimeList.css';
 
 const NewAnimeList = () => {
   const [animes, setAnimes] = useState([]);
@@ -24,42 +25,31 @@ const NewAnimeList = () => {
   };
 
   return (
-    <div>
-      {loading && <p>Chargement...</p>}
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
-        {animes.map((anime, index) => (
-          <Link 
-            to={`/anime/${anime.id}`} 
-            key={`${anime.id}-${index}`}
-            style={{ textDecoration: 'none', color: 'inherit' }}
-          >
-            <div
-              style={{
-                border: '1px solid #ddd',
-                borderRadius: '8px',
-                padding: '16px',
-                maxWidth: '200px',
-                transition: 'transform 0.2s',
-                ':hover': {
-                  transform: 'scale(1.05)'
-                }
-              }}
+    <div className="new-anime">
+      <div className="container-new">
+        <h1>Nouveautés</h1>
+        {loading && <p className="loading-message">Chargement...</p>}
+        {error && <p className="error-message">{error}</p>}
+        <div className="anime-grid">
+          {animes.map((anime, index) => (
+            <Link 
+              to={`/anime/${anime.id}`} 
+              key={`${anime.id}-${index}`}
+              className="anime-card"
             >
               <img
                 src={anime.image_url}
                 alt={anime.title || anime.title_japanese}
-                style={{ width: '100%', borderRadius: '4px' }}
               />
               <h3>{anime.title || anime.title_japanese}</h3>
               <p>
                 {anime.description
-                  ? anime.description.substring(0, 100)
-                  : 'Aucune description disponible'}...
+                  ? anime.description.substring(0, 100) + '...'
+                  : 'Aucune description disponible'}
               </p>
-            </div>
-          </Link>
-        ))}
+            </Link>
+          ))}
+        </div>
       </div>
     </div>
   );

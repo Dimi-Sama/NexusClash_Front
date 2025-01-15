@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { getCurrentUser } from '../api/auth';
+import './UtilisateurList.css';
+import { useNavigate } from 'react-router-dom';
 
 function UserList() {
   const [animeList, setAnimeList] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserList = async () => {
@@ -25,23 +28,33 @@ function UserList() {
     fetchUserList();
   }, []);
 
+  const handleAnimeClick = (animeId) => {
+    navigate(`/anime/${animeId}`);
+  };
+
   if (loading) return <div>Chargement...</div>;
 
   return (
     <div className="user-list">
       <h1>Ma Liste d'Animés</h1>
-      {animeList.length > 0 ? (
-        <ul>
-          {animeList.map((anime) => (
-            <li key={anime.id}>
-              <img src={anime.image_url} alt={anime.title_japanese} />
-              <h3>{anime.title_japanese}</h3>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>Votre liste est vide.</p>
-      )}
+      <div className="container">
+        {animeList.length > 0 ? (
+          <div className="anime-grid">
+            {animeList.map((anime) => (
+              <div
+                key={anime.id}
+                className="anime-card"
+                onClick={() => handleAnimeClick(anime.id)}
+              >
+                <img src={anime.image_url} alt={anime.title || anime.title_japanese} />
+                <h3>{anime.title || anime.title_japanese}</h3>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p>Votre liste est vide.</p>
+        )}
+      </div>
     </div>
   );
 }
