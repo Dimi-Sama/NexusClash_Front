@@ -1,5 +1,6 @@
 stages:
   - install
+  - test
   - build
   - package
 
@@ -11,6 +12,14 @@ install-job:
   artifacts:
     paths:
       - node_modules
+
+test-job:
+  stage: test
+  image: node:20.18.0-slim
+  dependencies:
+    - install-job
+  script:
+    - npm run test
 
 build-job:
   stage: build
