@@ -42,14 +42,19 @@ function Showdown() {
     loadUser();
 
     // Connexion WebSocket
-    const newSocket = io('http://127.0.0.1:5000', {
-        withCredentials: false,
-        transports: ['websocket', 'polling'],
-        cors: {
-            origin: "*",
-            methods: ["GET", "POST"]
-        }
-    });
+    const newSocket = io('/', {
+      withCredentials: false,
+      transports: ['websocket', 'polling'],
+      path: '/socket.io/',
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
+      autoConnect: true,
+      cors: {
+          origin: "*",
+          methods: ["GET", "POST"]
+      }
+  });
     setSocket(newSocket);
 
     // Demander la bataille actuelle au serveur

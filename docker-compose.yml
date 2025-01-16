@@ -2,20 +2,24 @@ version: '3.8'
 
 services:
   frontend:
-    image: overdrivesystems/nexusclash_front:0.0.1
+    image: nexusclashfront:latest
     container_name: NexusClash-frontend
     ports:
       - "80:80"
+    networks:
+      - NexusClash-network
     restart: unless-stopped
 
   api:
-    image: overdrivesystems/nexusclash_back:0.0.1
+    image: back:latest
     container_name: NexusClash-api
     ports:
-      - "3000:3000"
+      - "5000:5000"
     environment:
       - DATABASE_URL=postgresql://Nexus:Nexus1234@postgres:5432/NexusClash
       - NODE_ENV=production
+      - CORS_ORIGIN=http://localhost
+      - SOCKET_PATH=/socket.io/
     depends_on:
       - postgres
     networks:
