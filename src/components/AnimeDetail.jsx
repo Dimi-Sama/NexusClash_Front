@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import './AnimeDetail.css';
 import SearchAnime from './SearchAnime';
-import { getCurrentUser} from "../api/auth";
+import { getCurrentUser } from "../api/auth";
+import swal from 'sweetalert';
 
 function AnimeDetail() {
   const { id } = useParams();
@@ -53,7 +54,7 @@ function AnimeDetail() {
     if (!token) return;
   
     try {
-              const user = await getCurrentUser();
+      const user = await getCurrentUser();
       const response = await fetch('http://localhost:5000/anime/add', {
         method: 'POST',
         headers: {
@@ -67,12 +68,16 @@ function AnimeDetail() {
   
       const data = await response.json();
       if (response.ok) {
-        alert(data.message);
+        if (data.message === "Anime already in the user's list") {
+          swal("Information", "Cet anime est déjà dans votre liste.", "info");
+        } else {
+          swal("Succès", data.message, "success");
+        }
       } else {
-        console.error(data.error || 'Erreur inconnue');
+        swal("Erreur", data.error || 'Erreur inconnue', "error");
       }
     } catch (error) {
-      console.error('Erreur lors de l\'ajout:', error);
+      swal("Erreur", 'Erreur lors de l\'ajout', "error");
     }
   };
 

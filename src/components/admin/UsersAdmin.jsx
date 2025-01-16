@@ -29,6 +29,7 @@ function UsersAdmin() {
     setSelectedUser(user)
     setFormData({
       nom_utilisateur: user.nom_utilisateur,
+      email: user.email,
       is_admin: user.is_admin
     })
   }
