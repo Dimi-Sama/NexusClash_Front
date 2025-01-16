@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   frontend:
-    image: nexusclashfront:latest
+    image: overdrivesystems/nexusclash_front:final
     container_name: NexusClash-frontend
     ports:
       - "80:80"
@@ -11,7 +11,7 @@ services:
     restart: unless-stopped
 
   api:
-    image: back:latest
+    image: overdrivesystems/nexusclash_back:final
     container_name: NexusClash-api
     ports:
       - "5000:5000"
