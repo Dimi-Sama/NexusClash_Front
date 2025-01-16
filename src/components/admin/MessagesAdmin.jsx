@@ -1,65 +1,190 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { loginUser } from '../api/auth';
-import './Login.css';
+import React, { useState, useEffect } from 'react'
+import DataTable from 'react-data-table-component'
+import axiosInstance from '../../api/auth'
+import './MessagesAdmin.css'
 
-const LoginPage = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const navigate = useNavigate();
+function MessagesAdmin() {
+  const [messages, setMessages] = useState([])
+  const [error, setError] = useState(null)
+  const [selectedMessage, setSelectedMessage] = useState(null)
+  const [formData, setFormData] = useState({
+    contenu: '',
+    id_bataille: '',
+    id_utilisateur: ''
+  })
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
+  useEffect(() => {
+    fetchMessages()
+  }, [])
+
+  const fetchMessages = async () => {
     try {
-      const user = await loginUser(username, password);
-      localStorage.setItem('user', JSON.stringify(user));
-      navigate('/');
-      window.location.reload()
-    } catch (err) {
-      setError('Identifiants incorrects');
+      const response = await axiosInstance.get('/messages/')
+      setMessages(response.data)
+    } catch (error) {
+      setError('Erreur lors de la récupération des messages')
     }
-  };
+  }
+
+  const handleEdit = (message) => {
+    setSelectedMessage(message)
+    setFormData({
+      contenu: message.contenu,
+      id_bataille: message.id_bataille,
+      id_utilisateur: message.id_utilisateur
+    })
+  }
+
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }))
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      await axiosInstance.put(`/messages/${selectedMessage.id_message}/`, formData)
+      fetchMessages()
+      resetForm()
+    } catch (error) {
+      setError('Erreur lors de la mise à jour')
+    }
+  }
+
+  const handleDelete = async (id) => {
+    if (window.confirm('Êtes-vous sûr de vouloir supprimer ce message ?')) {
+      try {
+        await axiosInstance.delete(`/messages/${id}`, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        fetchMessages();
+      } catch (error) {
+        console.error('Erreur détaillée:', error);
+        setError('Erreur lors de la suppression');
+      }
+    }
+  }
+
+  const resetForm = () => {
+    setSelectedMessage(null)
+    setFormData({
+      contenu: '',
+      id_bataille: '',
+      id_utilisateur: ''
+    })
+  }
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleString('fr-FR')
+  }
+
+  const columns = [
+    {
+      name: 'ID',
+      selector: row => row.id_message,
+      sortable: true,
+      width: '80px'
+    },
+    {
+      name: 'Contenu',
+      selector: row => row.contenu,
+      sortable: true,
+      width: '300px'
+    },
+    {
+      name: 'Bataille ID',
+      selector: row => row.id_bataille,
+      sortable: true,
+      width: '100px'
+    },
+    {
+      name: 'Utilisateur ID',
+      selector: row => row.id_utilisateur,
+      sortable: true,
+      width: '100px'
+    },
+    {
+      name: 'Date',
+      selector: row => formatDate(row.date_message),
+      sortable: true,
+      width: '200px'
+    },
+    {
+      name: 'Actions',
+      cell: row => (
+        <div className="action-buttons">
+          <button onClick={() => handleDelete(row.id_message)} className="delete-btn">
+            Supprimer
+          </button>
+        </div>
+      ),
+      width: '200px'
+    }
+  ]
+
+  const customStyles = {
+    table: {
+      style: {
+        backgroundColor: '#2a2a2a',
+        color: '#fff'
+      }
+    },
+    rows: {
+      style: {
+        backgroundColor: '#2a2a2a',
+        color: '#fff',
+        '&:hover': {
+          backgroundColor: '#3a3a3a'
+        }
+      }
+    },
+    headRow: {
+      style: {
+        backgroundColor: '#1a1a1a',
+        color: '#fff'
+      }
+    },
+    pagination: {
+      style: {
+        backgroundColor: '#2a2a2a',
+        color: '#fff'
+      }
+    }
+  }
 
   return (
-    <div className="login-page">
-      <div className="login-form-container">
-        <h2>Connexion</h2>
-        {error && <p className="login-message error">{error}</p>}
-        <form onSubmit={handleLogin}>
-          <div className="form-group">
-            <label htmlFor="username">Nom d'utilisateur</label>
-            <input
-              id="username"
-              type="text"
-              placeholder="Entrez votre nom d'utilisateur"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="password">Mot de passe</label>
-            <input
-              id="password"
-              type="password"
-              placeholder="Entrez votre mot de passe"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-          <button className="login-button" type="submit">
-            Se connecter
-          </button>
-        </form>
+    <div className="messages-admin">
+      <h1>Gestion des Messages</h1>
+      
+      {error && <div className="error-message">{error}</div>}
+
+      <div className="messages-list-section">
+        <h2>Liste des Messages</h2>
+        <DataTable
+          columns={columns}
+          data={messages}
+          pagination
+          paginationPerPage={10}
+          paginationRowsPerPageOptions={[10, 20, 30, 50]}
+          customStyles={customStyles}
+          striped
+          highlightOnHover
+          pointerOnHover
+          responsive
+          noDataComponent="Aucun message trouvé"
+        />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default LoginPage;
-// (Created by jeudenoa | CSS by Dimi-Sama)
+export default MessagesAdmin 
+// (Created by TrueDiamant777 | Edited by Dimi-Sama | CSS by TrueDiamant777 & Dimi-Sama)
 // ⢌⢣⡝⡼⣙⢮⢳⠞⣦⢣⠄⠀⠄⡀⢀⠀⢆⡐⢢⠐⡄⢢⠐⢢⠐⠤⠐⢂⠐⠀⠀⡠⠄⢂⠰⡀⢆⠰⡀⢆⠰⣀⠒⡄⢒⡐⢂⡒⠰⢂⠲⢄⠣⢆⡱⠢⢜⢢⡑⢎⢆⢣⠜⣢⠹⣌⡳⡝⣮⣝
 // ⠀⢢⠘⡰⢉⡎⢯⡞⣥⢏⠄⡈⠐⠀⠀⡈⠄⠘⠆⠣⠜⣠⠉⠆⠀⠀⠀⠈⠄⠀⠀⠁⠈⠀⠁⡈⠀⠃⠘⠤⠁⢆⠱⢈⠆⡌⡡⠜⣡⠋⢦⢉⠆⡣⠜⣑⠪⡰⢘⡌⢎⠦⡹⢆⡳⢌⢳⡙⣖⢺
 // ⠐⡀⢆⠡⢳⡘⡧⢞⡱⡞⠀⠄⡁⠀⠀⠐⡈⠄⡀⠀⠀⠀⠉⠀⠀⠀⠀⡀⠀⠈⣔⠪⡜⣩⠣⡍⣍⢣⢓⡒⠲⡤⠬⣄⠊⠔⡡⢚⠤⡙⢤⣺⠼⡐⣍⢢⠱⣁⠣⢜⡨⢒⡍⢲⡉⢞⢢⡕⢪⡱

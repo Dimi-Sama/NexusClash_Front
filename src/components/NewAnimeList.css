@@ -1,0 +1,105 @@
+.new-anime {
+  padding: 20px;
+}
+
+.new-anime h1 {
+  margin-top: 10px;
+  color: white;
+  text-align: center;
+  font-family: 'Noto Sans', sans-serif;
+}
+
+.container-new {
+  width: 90vw;
+  height: 45vh;
+  margin: 0 auto;
+  padding: 0 20px;
+  margin-top: 1em;
+  background: rgba(211, 76, 76, 0.14);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(211, 76, 76, 0.33);
+  overflow-y: auto;
+}
+
+.container-new::-webkit-scrollbar {
+  width: 8px;
+}
+
+.container-new::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+.container-new::-webkit-scrollbar-thumb {
+  background: rgba(211, 76, 76, 0.3);
+  border-radius: 4px;
+}
+
+.container-new::-webkit-scrollbar-thumb:hover {
+  background: rgba(211, 76, 76, 0.5);
+}
+
+.anime-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.anime-card {
+  background: rgba(0, 0, 0, 0.37);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(4.8px);
+  -webkit-backdrop-filter: blur(4.8px);
+  border: 1px solid rgba(0, 0, 0, 0.33);
+  transition: transform 0.2s;
+  cursor: pointer;
+  color: rgb(219, 219, 219);
+  padding: 16px;
+  text-decoration: none;
+}
+
+.anime-card:hover {
+  transform: translateY(-5px);
+}
+
+.anime-card img {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.anime-card h3 {
+  padding: 10px 0;
+  margin: 0;
+  font-size: 1rem;
+  text-align: center;
+  color: #ffffff;
+  font-family: 'Noto Sans', sans-serif;
+}
+
+.anime-card p {
+  color: #b6b6b6;
+  font-size: 0.9em;
+  line-height: 1.4;
+  font-family: 'Noto Sans', sans-serif;
+}
+
+.loading-message {
+  text-align: center;
+  color: #ffffff;
+  padding: 20px;
+}
+
+.error-message {
+  text-align: center;
+  color: #f44336;
+  padding: 20px;
+  background: rgba(244, 67, 54, 0.1);
+  border-radius: 8px;
+} 

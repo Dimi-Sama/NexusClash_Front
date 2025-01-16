@@ -1,12 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
 .anime-detail-container {
   min-height: 100vh;
-  background-color: #f5f5f5;
+  background-color: #222222;
 }
 
 .anime-detail-content {
   max-width: 1400px;
   margin: 0 auto;
   padding: 20px;
+  background: rgba(211, 76, 76, 0.14);
+border-radius: 16px;
+box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+backdrop-filter: blur(5px);
+-webkit-backdrop-filter: blur(5px);
+border: 1px solid rgba(211, 76, 76, 0.33);
 }
 
 .anime-header {
@@ -21,6 +29,7 @@
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   object-fit: cover;
+  
 }
 
 .anime-info {
@@ -29,7 +38,8 @@
 
 .anime-info h1 {
   margin-bottom: 20px;
-  color: #333;
+  color: #ffffff;
+  font-family: 'Noto Sans', sans-serif;
 }
 
 .add-to-list-button {
@@ -39,15 +49,18 @@
   padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
+  font-family: 'Noto Sans', sans-serif;
 }
 
 .date {
-  color: #666;
+  color: #7c7c7c;
   margin-bottom: 15px;
 }
 
 .description {
   line-height: 1.6;
+  color: #ffffff;
+  font-family: 'Noto Sans', sans-serif;
 }
 
 .trailer-section {
@@ -55,16 +68,16 @@
 }
 
 .trailer-section h2 {
-  margin-bottom: 20px;
-}
-
-.recommendations-section {
-  margin-top: 30px;
-}
+    margin-bottom: 20px;
+    color: #ffffff;
+    font-family: 'Noto Sans', sans-serif;
+  }
 
 .recommendations-section h2 {
   margin-bottom: 20px;
-  color: #333;
+  color: #ffffff;
+  text-align: center;
+  font-family: 'Noto Sans', sans-serif;
 }
 
 .recommendations-grid {
@@ -78,6 +91,7 @@
   text-decoration: none;
   color: inherit;
   transition: transform 0.2s;
+  
 }
 
 .recommendation-item:hover {
@@ -95,8 +109,9 @@
 .recommendation-item h3 {
   font-size: 0.9em;
   margin: 0;
-  color: #333;
+  color: #ffffff;
   text-align: center;
+  font-family: 'Noto Sans', sans-serif;
 }
 
 .content-layout {
@@ -108,10 +123,22 @@
 
 /* Styles pour la section des animes liés (gauche) */
 .related-section {
-  background: #f8f8f8;
+  background: rgba(0, 0, 0, 0.14);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5.1px);
+  -webkit-backdrop-filter: blur(5.1px);
+  border: 1px solid rgba(0, 0, 0, 0.33);
   padding: 15px;
   border-radius: 8px;
   height: fit-content;
+}
+
+.related-section h2 {
+  color: #ffffff;
+  text-align: center;
+  margin-bottom: 20px;
+  font-family: 'Noto Sans', sans-serif;
 }
 
 .related-list {
@@ -123,11 +150,17 @@
 .related-item {
   text-decoration: none;
   color: inherit;
-  background: white;
+  background: rgba(0, 0, 0, 0.30);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5.1px);
+  -webkit-backdrop-filter: blur(5.1px);
+  border: 1px solid rgba(0, 0, 0, 0.33);
   padding: 15px;
   border-radius: 6px;
   transition: transform 0.2s;
 }
+
 
 .related-item:hover {
   transform: scale(1.02);
@@ -141,29 +174,40 @@
 
 .relation-type {
   font-size: 0.8em;
-  color: #666;
-  background: #f0f0f0;
+  color: #b6b6b6;
+  background: #464646;
   padding: 4px 8px;
   border-radius: 4px;
   display: inline-block;
+  font-family: 'Noto Sans', sans-serif;
 }
 
 .related-item h3 {
   margin: 0;
   font-size: 0.95em;
-  color: #333;
+  color: #ffffff;
 }
 
 /* Styles pour la section principale (centre) */
 .main-content {
-  background: white;
   padding: 20px;
   border-radius: 8px;
-}
+  background: rgba(0, 0, 0, 0.30);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5.1px);
+  -webkit-backdrop-filter: blur(5.1px);
+  border: 1px solid rgba(0, 0, 0, 0.63);
+  }
 
 /* Styles pour la section des recommandations (droite) */
 .recommendations-section {
-  background: #f8f8f8;
+  background: rgba(0, 0, 0, 0.14);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5.1px);
+  -webkit-backdrop-filter: blur(5.1px);
+  border: 1px solid rgba(0, 0, 0, 0.33);
   padding: 15px;
   border-radius: 8px;
   height: fit-content;
@@ -178,7 +222,12 @@
 .recommendation-item {
   text-decoration: none;
   color: inherit;
-  background: white;
+  background: rgba(0, 0, 0, 0.30);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5.1px);
+  -webkit-backdrop-filter: blur(5.1px);
+  border: 1px solid rgba(0, 0, 0, 0.33);
   padding: 10px;
   border-radius: 6px;
   transition: transform 0.2s;
@@ -194,18 +243,24 @@
   object-fit: cover;
   border-radius: 4px;
 }
-
 .recommendation-item h3 {
   font-size: 0.9em;
   margin: 8px 0;
-  color: #333;
+  color: #ffffff;
+  font-family: 'Noto Sans', sans-serif;
 }
 
 /* Ajout des styles pour les messages de chargement et absence de données */
 .loading-message, .no-data-message {
   padding: 15px;
   text-align: center;
-  color: #666;
-  background: white;
+  color: #8f8f8f;
+  background: rgba(0, 0, 0, 0.30);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5.1px);
+  -webkit-backdrop-filter: blur(5.1px);
+  border: 1px solid rgba(0, 0, 0, 0.33);
   border-radius: 6px;
+  font-family: 'Noto Sans', sans-serif;
 } 

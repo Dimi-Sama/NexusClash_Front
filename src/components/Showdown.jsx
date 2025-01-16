@@ -1,8 +1,20 @@
 import React, { useState, useEffect } from 'react'
 import './Showdown.css'
 import io from 'socket.io-client';
+import { getCurrentUser } from '../api/auth';
 
 function Showdown() {
+  const getRandomColor = (username) => {
+    let hash = 0;
+    for (let i = 0; i < username.length; i++) {
+      hash = username.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    
+    const hue = hash % 360;
+    return `hsl(${hue}, 70%, 50%)`;
+  };
+
+  const [currentUser, setCurrentUser] = useState(null);
   const [bataille, setBataille] = useState(null);
   const [loading, setLoading] = useState(true);
   const [tours, setTours] = useState([]);
@@ -17,6 +29,18 @@ function Showdown() {
   });
 
   useEffect(() => {
+    // Charger l'utilisateur au montage du composant
+    const loadUser = async () => {
+      try {
+        const userData = await getCurrentUser();
+        setCurrentUser(userData);
+      } catch (error) {
+        console.error('Erreur lors de la récupération de l\'utilisateur:', error);
+      }
+    };
+
+    loadUser();
+
     // Connexion WebSocket
     const newSocket = io('http://127.0.0.1:5000', {
         withCredentials: false,
@@ -137,17 +161,35 @@ function Showdown() {
     };
   }, []);
 
+  useEffect(() => {
+    const preventDefault = (e) => {
+      e.preventDefault();
+    };
+
+    // Désactiver le défilement de la molette
+    document.addEventListener('wheel', preventDefault, { passive: false });
+
+    // Nettoyage lors du démontage du composant
+    return () => {
+      document.removeEventListener('wheel', preventDefault);
+    };
+  }, []);
+
   const handleSendMessage = (e) => {
     e.preventDefault();
-    if (messageInput.trim() && socket && bataille) {
-        const messageData = {
-            id_utilisateur: 1, // À remplacer par l'ID réel de l'utilisateur
-            id_bataille: bataille.id_bataille,
-            contenu: messageInput
-        };
-        
-        socket.emit('envoyer_message', messageData);
-        setMessageInput('');
+    if (messageInput.trim() && socket && bataille && currentUser) {
+      console.log('Current user:', currentUser); // Debug log
+      
+      const messageData = {
+        id_utilisateur: currentUser.id, // Retour à id_utilisateur
+        username: currentUser.username,
+        id_bataille: bataille.id_bataille, // Changement de battle_id à id_bataille
+        contenu: messageInput // Retour à contenu
+      };
+      
+      console.log('Message data:', messageData); // Debug log
+      socket.emit('envoyer_message', messageData);
+      setMessageInput('');
     }
   };
 
@@ -162,15 +204,20 @@ function Showdown() {
     <div className="showdown-page">
       <div className="showdown-container">
         <div className="battle-background">
-          <iframe 
+        <iframe 
             src={`https://www.gjtorikian.com/Earthbound-Battle-Backgrounds-JS/?layer1=${backgroundLayers.layer1}&layer2=${backgroundLayers.layer2}&fullscreen=true`} 
-            frameborder="0">
+            frameborder="0"
+            style={{pointerEvents: 'none'}}
+            title="battle-background"
+            tabIndex="-1">
           </iframe>
         </div>
 
-        <button className="new-battle-btn" onClick={fetchBataille}>
-          Nouvelle Bataille
-        </button>
+        {currentUser?.is_admin && (
+          <button className="new-battle-btn" onClick={fetchBataille}>
+            Nouvelle Bataille
+          </button>
+        )}
         
         {error ? (
           <div className="error-message">
@@ -217,32 +264,44 @@ function Showdown() {
       <div className="chat-section">
         <div className="chat-messages">
           {messages.map((msg, index) => (
-            <div key={index} className="chat-message">
-              <span className="username">Utilisateur {msg.id_utilisateur}:</span>
+            <div key={index} className={`chat-message ${msg.id_utilisateur === currentUser?.id ? 'own-message' : ''}`}>
+              <span 
+                className="username" 
+                style={{ color: getRandomColor(msg.username || 'Anonyme') }}
+              >
+                {msg.username || 'Anonyme'}
+              </span>
               <span className="message">{msg.contenu}</span>
             </div>
           ))}
         </div>
-        <div className="chat-input-container">
-          <input 
-            type="text" 
-            value={messageInput}
-            onChange={(e) => setMessageInput(e.target.value)}
-            placeholder="Envoyez un message..." 
-            className="chat-input"
-            onKeyPress={(e) => e.key === 'Enter' && handleSendMessage(e)}
-          />
-          <button className="chat-send-button" onClick={handleSendMessage}>
-            Envoyer
-          </button>
-        </div>
+        
+        {currentUser ? (
+          <div className="chat-input-container">
+            <input 
+              type="text" 
+              value={messageInput}
+              onChange={(e) => setMessageInput(e.target.value)}
+              placeholder="Envoyez un message..." 
+              className="chat-input"
+              onKeyPress={(e) => e.key === 'Enter' && handleSendMessage(e)}
+            />
+            <button className="chat-send-button" onClick={handleSendMessage}>
+              Envoyer
+            </button>
+          </div>
+        ) : (
+          <div className="chat-login-message">
+            Connectez-vous pour participer au chat
+          </div>
+        )}
       </div>
     </div>
   );
 }
 
 export default Showdown 
-// Dimi-Sama est passé par ici le 10/01/2025
+// (Created by Dimi-Sama)
 // ⢌⢣⡝⡼⣙⢮⢳⠞⣦⢣⠄⠀⠄⡀⢀⠀⢆⡐⢢⠐⡄⢢⠐⢢⠐⠤⠐⢂⠐⠀⠀⡠⠄⢂⠰⡀⢆⠰⡀⢆⠰⣀⠒⡄⢒⡐⢂⡒⠰⢂⠲⢄⠣⢆⡱⠢⢜⢢⡑⢎⢆⢣⠜⣢⠹⣌⡳⡝⣮⣝
 // ⠀⢢⠘⡰⢉⡎⢯⡞⣥⢏⠄⡈⠐⠀⠀⡈⠄⠘⠆⠣⠜⣠⠉⠆⠀⠀⠀⠈⠄⠀⠀⠁⠈⠀⠁⡈⠀⠃⠘⠤⠁⢆⠱⢈⠆⡌⡡⠜⣡⠋⢦⢉⠆⡣⠜⣑⠪⡰⢘⡌⢎⠦⡹⢆⡳⢌⢳⡙⣖⢺
 // ⠐⡀⢆⠡⢳⡘⡧⢞⡱⡞⠀⠄⡁⠀⠀⠐⡈⠄⡀⠀⠀⠀⠉⠀⠀⠀⠀⡀⠀⠈⣔⠪⡜⣩⠣⡍⣍⢣⢓⡒⠲⡤⠬⣄⠊⠔⡡⢚⠤⡙⢤⣺⠼⡐⣍⢢⠱⣁⠣⢜⡨⢒⡍⢲⡉⢞⢢⡕⢪⡱
@@ -262,7 +321,7 @@ export default Showdown
 // ⣵⣻⣞⡇⠀⠀⠀⠀⠀⢀⠀⠀⡌⢰⢣⠋⠀⠀⠑⣺⣿⣿⣿⣿⣿⣿⢁⢃⡮⠇⢡⢇⠣⠀⠀⠂⢸⡜⣣⠗⠎⠀⢸⠎⠀⠈⡗⢮⡱⠀⠀⠀⠂⠀⢀⠘⠄⢣⠘⡠⢂⢪⠳⢬⡙⢦⠭⣙⠣⠀
 // ⣿⣵⢻⠆⠀⠀⠀⠀⠄⠀⠀⠀⡜⢬⡳⣤⠆⡥⢸⣿⣿⣿⣿⣿⣿⠇⡌⡼⠘⢀⡎⣡⠂⠀⠁⢈⠶⣙⠦⠋⠀⠌⣸⠃⠀⠀⣏⠇⡇⠀⠀⠠⠀⠀⠀⠎⠘⠄⠣⠐⡁⢂⠹⣰⡙⣎⠧⣍⠧⠀
 // ⡿⣞⡿⠀⠀⠀⠀⠂⠀⢀⠈⠰⡈⢶⢁⣾⡲⠇⣻⣿⣿⣿⣿⣿⡏⡰⠐⠀⡐⠀⢴⠡⢀⠀⢐⢊⡱⠣⠉⠀⡠⠃⡎⠀⠀⠀⣸⠙⠀⠀⠀⡀⠀⠀⠀⠀⠀⠀⠀⣤⣀⠐⠂⡵⢚⡜⡲⢜⡢⢤
-// ⢽⡺⡕⠀⠀⠠⠁⠀⠀⡀⠀⡱⢈⠆⡌⢡⠉⢴⣿⣿⣿⣿⣿⡟⣰⠏⣠⠎⣀⠼⠀⠃⠄⢠⡏⠰⠌⠁⠠⣰⠇⡑⠀⣄⠂⠁⢸⠀⠀⠀⠁⠀⠀⠀⠀⠀⠀⠈⢰⢣⡜⡍⢰⣍⠳⡜⢥⢫⡄⣿
+// ⢽⡺⡕⠀⠀⠠⠁⠀⠀⡀⠀⡱⢈⠆⡌⢡⠉⢴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣏⣾⣳⠀⡀⠀⠄⡈⢏⣞⣼⡯⠄⠀⠈⠀⢀⠈⠀⠀⠀⠀⠄⠀⠄⠀⢰⡍⡞⠀⢸⣃⠶⡩⠞⣤⠓⠈⡄
 // ⠎⠷⠃⠀⢀⠆⠀⠀⢀⠀⠀⡱⢈⡒⠌⡆⣉⣾⣿⣿⣿⣿⣿⣾⣿⣿⣵⣷⣭⣶⣻⣝⠒⠀⠀⢀⠀⠃⣼⣿⢘⠄⣼⣃⠀⠀⠀⠀⠀⠀⠄⠀⠀⠀⠀⠀⠀⠀⣏⠶⡉⠀⢶⣨⢓⠭⣎⡱⠂⢿
 // ⢎⡱⠀⠀⡌⠀⠀⠀⠀⠀⠄⡑⢢⠑⣊⢴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣏⣾⣳⠀⡀⠀⠄⡈⢏⣞⣼⡯⠄⠀⠈⠀⢀⠈⠀⠀⠀⠀⠄⠀⠄⠀⢰⡍⡞⠀⢸⣃⠶⡩⠞⣤⠓⠈⡄
 // ⣿⠀⠀⡘⠀⠀⠀⠀⠁⠀⠠⠘⡄⣃⠆⢾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⣸⣷⣧⣴⣛⡆⡰⢉⣴⣿⣿⣿⠔⠀⢁⠠⠀⠀⢀⠈⠀⠀⢀⠠⠀⢀⠷⡘⠀⢠⠳⣌⢳⣉⢳⠰⠃⠀⢂

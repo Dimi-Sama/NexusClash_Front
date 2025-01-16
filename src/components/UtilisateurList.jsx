@@ -1,65 +1,74 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { getCurrentUser } from '../api/auth';
+import './UtilisateurList.css';
 import { useNavigate } from 'react-router-dom';
-import { loginUser } from '../api/auth';
-import './Login.css';
+import { useUser } from '../context/UserContext';
 
-const LoginPage = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+function UserList() {
+  const [animeList, setAnimeList] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const { user } = useUser();
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-      const user = await loginUser(username, password);
-      localStorage.setItem('user', JSON.stringify(user));
-      navigate('/');
-      window.location.reload()
-    } catch (err) {
-      setError('Identifiants incorrects');
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+      return;
     }
+
+    const fetchUserList = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/anime/list/${user.id}`);
+        const data = await response.json();
+        setAnimeList(data);
+      } catch (error) {
+        console.error('Erreur lors du chargement de la liste:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserList();
+  }, [user, navigate]);
+
+  const handleAnimeClick = (animeId) => {
+    navigate(`/anime/${animeId}`);
   };
 
+  if (!user) {
+    return <div>Connectez-vous pour voir votre liste</div>;
+  }
+
+  if (loading) return <div>Chargement...</div>;
+
   return (
-    <div className="login-page">
-      <div className="login-form-container">
-        <h2>Connexion</h2>
-        {error && <p className="login-message error">{error}</p>}
-        <form onSubmit={handleLogin}>
-          <div className="form-group">
-            <label htmlFor="username">Nom d'utilisateur</label>
-            <input
-              id="username"
-              type="text"
-              placeholder="Entrez votre nom d'utilisateur"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
+    <div className="user-list">
+      <h1>Ma Liste d'Animés</h1>
+      <div className="container">
+        {animeList.length > 0 ? (
+          <div className="anime-grid">
+            {animeList.map((anime) => (
+              <div
+                key={anime.id}
+                className="anime-card"
+                onClick={() => handleAnimeClick(anime.id)}
+              >
+                <img src={anime.image_url} alt={anime.title || anime.title_japanese} />
+                <h3>{anime.title || anime.title_japanese}</h3>
+              </div>
+            ))}
           </div>
-          <div className="form-group">
-            <label htmlFor="password">Mot de passe</label>
-            <input
-              id="password"
-              type="password"
-              placeholder="Entrez votre mot de passe"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-          <button className="login-button" type="submit">
-            Se connecter
-          </button>
-        </form>
+        ) : (
+          <p>Votre liste est vide.</p>
+        )}
       </div>
     </div>
   );
-};
+}
 
-export default LoginPage;
-// (Created by jeudenoa | CSS by Dimi-Sama)
+export default UserList;
+
+// (Created by jeudenoa | Edited by Dimi-Sama | CSS by Dimi-Sama)
 // ⢌⢣⡝⡼⣙⢮⢳⠞⣦⢣⠄⠀⠄⡀⢀⠀⢆⡐⢢⠐⡄⢢⠐⢢⠐⠤⠐⢂⠐⠀⠀⡠⠄⢂⠰⡀⢆⠰⡀⢆⠰⣀⠒⡄⢒⡐⢂⡒⠰⢂⠲⢄⠣⢆⡱⠢⢜⢢⡑⢎⢆⢣⠜⣢⠹⣌⡳⡝⣮⣝
 // ⠀⢢⠘⡰⢉⡎⢯⡞⣥⢏⠄⡈⠐⠀⠀⡈⠄⠘⠆⠣⠜⣠⠉⠆⠀⠀⠀⠈⠄⠀⠀⠁⠈⠀⠁⡈⠀⠃⠘⠤⠁⢆⠱⢈⠆⡌⡡⠜⣡⠋⢦⢉⠆⡣⠜⣑⠪⡰⢘⡌⢎⠦⡹⢆⡳⢌⢳⡙⣖⢺
 // ⠐⡀⢆⠡⢳⡘⡧⢞⡱⡞⠀⠄⡁⠀⠀⠐⡈⠄⡀⠀⠀⠀⠉⠀⠀⠀⠀⡀⠀⠈⣔⠪⡜⣩⠣⡍⣍⢣⢓⡒⠲⡤⠬⣄⠊⠔⡡⢚⠤⡙⢤⣺⠼⡐⣍⢢⠱⣁⠣⢜⡨⢒⡍⢲⡉⢞⢢⡕⢪⡱
